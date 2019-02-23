@@ -11,6 +11,11 @@
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss"
+        },
+      "defaults": {
+          "serve": {
+            "port": 8081
+          }
         }
       },
       "architect": {
