@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  graphql: {
+    apiKey: '',
+    authDomain: '',
+    databaseURL: 'http://localhost:8080/v1alpha1/graphql/',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: ''
+  }
 };
 
 /*
