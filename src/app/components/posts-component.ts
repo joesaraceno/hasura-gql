@@ -1,22 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+
+
+const subscription = gql`
+  query Posts {
+    posts {
+      id
+      title
+      published
+      author {
+        id, name
+      }
+    }
+  }
+`;
 
 interface Post {
   id: number;
   title: string;
   published: boolean;
-  author_id: number
-}
-
-interface User {
-  id: number;
-  email: string;
-  name: string;
-  posts: Post[]
 }
 
 type Response = {
+  loading: boolean;
   posts: Post[];
 }
 
@@ -37,28 +45,26 @@ type Response = {
   `,
 })
 export class PostsList implements OnInit {
+  postSubscription: Subscription;
   posts: Post[];
   loading = true;
   error: any;
-
+  private querySubscription: Subscription;
   constructor(private apollo: Apollo) {}
 
   ngOnInit() {
-    this.apollo
-      .watchQuery<Response>({
-        query: gql`
-          {
-            posts {
-              author {id, name},
-              id
-              title
-            }
-          }
-        `,
-      })
-      .valueChanges.subscribe(result => {
-        this.posts = result.data.posts;
-        this.loading = false;
-      });
+    this.querySubscription = this.apollo.watchQuery<Response>({
+      query: subscription
+    })
+    .valueChanges
+    .subscribe(({data, loading}) => {
+      this.loading = loading;
+      this.posts = data.posts;
+    })
+  }
+
+  ngOnDestroy() {
+    this.postSubscription.unsubscribe();
   }
 }
+

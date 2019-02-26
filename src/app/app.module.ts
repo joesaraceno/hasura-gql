@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GraphQLModule } from './graphql.module';
+// import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PostsList } from './components/posts-component';
+import { GraphQLConfigModule } from './apollo.config';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { PostsList } from './components/posts-component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GraphQLModule,
+    GraphQLConfigModule,
     HttpClientModule
   ],
   providers: [],
