@@ -1,7 +1,4 @@
 
-
-<p>
-  new-post-component works!
-</p>
-
-
+<!-- {{ newPost }} -->
+<div style="margin-bottom: 40px;" *ngIf="!submitting">Waiting...</div>
+<div style="margin-bottom: 40px;" *ngIf="submitting">Submitting...</div>

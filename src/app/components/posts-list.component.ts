@@ -31,6 +31,7 @@ type Response = {
 @Component({
   selector: 'posts-list',
   template: `
+    <div> Current Articles </div>
     <div *ngIf="loading">
       Loading...
     </div>
