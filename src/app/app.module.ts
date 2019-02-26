@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { MaterialModule } from  './material';
+
 // gql/net stuff
 import { GraphQLConfigModule } from './apollo.config';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,7 +24,8 @@ import { NewPostComponent } from './components/new-post.component/new-post.compo
     BrowserModule,
     AppRoutingModule,
     GraphQLConfigModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
