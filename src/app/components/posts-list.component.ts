@@ -44,7 +44,7 @@ type Response = {
     </div>
   `,
 })
-export class PostsList implements OnInit {
+export class PostsListComponent implements OnInit {
   postSubscription: Subscription;
   posts: Post[];
   loading = true;
