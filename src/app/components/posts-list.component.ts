@@ -2,26 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-
-
-const subscription = gql`
-  query Posts {
-    posts {
-      id
-      title
-      published
-      author {
-        id, name
-      }
-    }
-  }
-`;
-
-interface Post {
-  id: number;
-  title: string;
-  published: boolean;
-}
+import { Post } from '../types';
+import { ALL_POSTS_QUERY } from '../graphql';
 
 type Response = {
   loading: boolean;
@@ -55,7 +37,7 @@ export class PostsListComponent implements OnInit {
 
   ngOnInit() {
     this.querySubscription = this.apollo.watchQuery<Response>({
-      query: subscription
+      query: ALL_POSTS_QUERY
     })
     .valueChanges
     .subscribe(({data, loading}) => {

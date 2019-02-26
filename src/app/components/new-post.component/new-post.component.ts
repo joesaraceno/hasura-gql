@@ -1,18 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
+// import gql from 'graphql-tag';
+import { Author, Post } from '../../types';
+import { ALL_AUTHORS_QUERY, NEW_POST_SUBMIT } from 'src/app/graphql';
 
-interface Author {
-  id: number;
-  name: string;
-}
+// interface Author {
+//   id: number;
+//   name: string;
+// }
 
-interface Post {
-  // id: number;
-  title: string;
-  published: boolean;
-}
+// interface Post {
+//   // id: number;
+//   title: string;
+//   published: boolean;
+// }
 
 interface Response {
   users: Author[];
@@ -35,29 +37,29 @@ function newPost(config: Post): { id: number, title: string, published: boolean 
 }
 
 
-// TODO: put this in some data service
-const subscription = gql`
-  query Users {
-    users {
-      id
-      name
-    }
-  }
-`;
+// // TODO: put this in some data service
+// const subscription = gql`
+//   query Users {
+//     users {
+//       id
+//       name
+//     }
+//   }
+// `;
 
 
-// TODO: put this in some data service
-const submitPost = gql`
-  mutation insert_post($objects:[posts_insert_input!]!) {
-  insert_posts(objects: $objects) {
-    returning {
-      id,
-      title,
-      author {id, name}
-    }
-  }
-}
-`
+// // TODO: put this in some data service
+// const submitPost = gql`
+//   mutation insert_post($objects:[posts_insert_input!]!) {
+//   insert_posts(objects: $objects) {
+//     returning {
+//       id,
+//       title,
+//       author {id, name}
+//     }
+//   }
+// }
+// `
 
 @Component({
   selector: 'new-post',
@@ -75,7 +77,7 @@ export class NewPostComponent implements OnInit {
 
   ngOnInit() {
     this.querySubscription = this.apollo.watchQuery<Response>({
-      query: subscription
+      query: ALL_AUTHORS_QUERY
     })
     .valueChanges
     .subscribe(({data, loading}) => {
@@ -83,8 +85,7 @@ export class NewPostComponent implements OnInit {
       this.authors = data.users;
       setTimeout(() => {
         this.submitting = true;
-        console.log('submitting Post...')
-        this.submitPost();
+        // this.submitPost();
       }, 4 * 1000)
     })
   }
@@ -94,13 +95,14 @@ export class NewPostComponent implements OnInit {
   }
 
   submitPost() {
+    console.log('submitting Post...')
     // just to generate the dummy post
     let someNewPost = newPost({ title: 'goodbye-' + Math.floor(Math.random() * 1000), published: false })
     console.log(someNewPost);
     // fire off the actual mutation
     // TODO: call this in some data service
     this.apollo.mutate({
-      mutation: submitPost,
+      mutation: NEW_POST_SUBMIT,
       variables: {
         objects: [
         {
