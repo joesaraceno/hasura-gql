@@ -1,6 +1,16 @@
 import { Author, Post } from './types';
 import gql from 'graphql-tag'
 
+export const POST_SUBSCRIPTION = gql`
+subscription {
+  posts {
+    id,
+    published
+    title
+    author { id, name }
+  }
+}
+`;
 
 export const ALL_POSTS_QUERY = gql`
   query Posts {
