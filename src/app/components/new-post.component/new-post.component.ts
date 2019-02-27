@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 // import gql from 'graphql-tag';
 import { Author, Post } from '../../types';
-import { ALL_AUTHORS_QUERY, NEW_POST_SUBMIT } from 'src/app/graphql';
+import { ALL_AUTHORS_QUERY, NEW_POST_SUBMIT, ALL_POSTS_QUERY } from 'src/app/graphql';
 
 // interface Author {
 //   id: number;
@@ -85,7 +85,7 @@ export class NewPostComponent implements OnInit {
       this.authors = data.users;
       setTimeout(() => {
         this.submitting = true;
-        // this.submitPost();
+        this.submitPost();
       }, 4 * 1000)
     })
   }
@@ -100,18 +100,27 @@ export class NewPostComponent implements OnInit {
     let someNewPost = newPost({ title: 'goodbye-' + Math.floor(Math.random() * 1000), published: false })
     console.log(someNewPost);
     // fire off the actual mutation
-    // TODO: call this in some data service
     this.apollo.mutate({
       mutation: NEW_POST_SUBMIT,
       variables: {
         objects: [
         {
           author_id: 1,
-          // author_id: someNewPost.id,
           title: someNewPost.title
           }
         ]
-      }
+      },
+      refetchQueries:[{
+        query: ALL_POSTS_QUERY,
+      }]
+      // update: (store, { data: { insert_post } }) => {
+      //   const data: any = store.readQuery({
+      //     query: ALL_POSTS_QUERY
+      //   });
+      //   // TODO: figure out how to access the right element in the store
+      //   data.posts.push(insert_post);
+      //   store.writeQuery({ query: ALL_POSTS_QUERY, data })
+      // }
     }).subscribe(({data}) => {
       console.log('got data:', data);
     }, (error) => {
