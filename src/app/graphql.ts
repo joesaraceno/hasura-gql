@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 export const POST_SUBSCRIPTION = gql`
 subscription {
   posts {
-    id,
+    id
     published
     title
     author { id, name }

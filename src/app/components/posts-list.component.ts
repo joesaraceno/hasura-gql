@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Apollo, QueryRef } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { Post } from '../types';
 import { ALL_POSTS_QUERY, POST_SUBSCRIPTION } from '../graphql';
 
