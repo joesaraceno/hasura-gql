@@ -1,26 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
-// import gql from 'graphql-tag';
 import { Author, Post } from '../../types';
-import { ALL_AUTHORS_QUERY, NEW_POST_SUBMIT, ALL_POSTS_QUERY } from 'src/app/graphql';
-
-// interface Author {
-//   id: number;
-//   name: string;
-// }
-
-// interface Post {
-//   // id: number;
-//   title: string;
-//   published: boolean;
-// }
+import { QUERY_ALL_AUTHORS, AllAuthorsQueryResponse, SUBMIT_NEW_POST, QUERY_ALL_POSTS } from 'src/app/graphql';
 
 interface Response {
   users: Author[];
 }
 
-
+// TODO: remov this once we put in forms
 // just for dummy crud until we get forms up and running
 function newPost(config: Post): { id: number, title: string, published: boolean } {
   let defaultPost = { id: Math.floor((Math.random() * 10000)), title: 'tata', published: false }
@@ -36,37 +24,13 @@ function newPost(config: Post): { id: number, title: string, published: boolean 
   return defaultPost;
 }
 
-
-// // TODO: put this in some data service
-// const subscription = gql`
-//   query Users {
-//     users {
-//       id
-//       name
-//     }
-//   }
-// `;
-
-
-// // TODO: put this in some data service
-// const submitPost = gql`
-//   mutation insert_post($objects:[posts_insert_input!]!) {
-//   insert_posts(objects: $objects) {
-//     returning {
-//       id,
-//       title,
-//       author {id, name}
-//     }
-//   }
-// }
-// `
-
 @Component({
   selector: 'new-post',
   templateUrl: './new-post.component.html',
   styleUrls: ['./new-post.component.scss']
 })
 export class NewPostComponent implements OnInit {
+  // TODO: replace this with a queryRef?
   authorsSubscription: Subscription;
   authors: Author[];
   loading = true;
@@ -76,13 +40,13 @@ export class NewPostComponent implements OnInit {
   constructor(private apollo: Apollo) {}
 
   ngOnInit() {
-    this.querySubscription = this.apollo.watchQuery<Response>({
-      query: ALL_AUTHORS_QUERY
+    this.querySubscription = this.apollo.watchQuery<AllAuthorsQueryResponse>({
+      query: QUERY_ALL_AUTHORS
     })
     .valueChanges
     .subscribe(({data, loading}) => {
       this.loading = loading;
-      this.authors = data.users;
+      this.authors = data.allAuthors;
       setTimeout(() => {
         this.submitting = true;
         this.submitPost();
@@ -95,13 +59,12 @@ export class NewPostComponent implements OnInit {
   }
 
   submitPost() {
-    console.log('submitting Post...')
+    // TODO: put in forms so we're relying on this automatic post
     // just to generate the dummy post
     let someNewPost = newPost({ title: 'goodbye-' + Math.floor(Math.random() * 1000), published: false })
-    console.log(someNewPost);
     // fire off the actual mutation
     this.apollo.mutate({
-      mutation: NEW_POST_SUBMIT,
+      mutation: SUBMIT_NEW_POST,
       variables: {
         objects: [
         {
@@ -110,17 +73,6 @@ export class NewPostComponent implements OnInit {
           }
         ]
       },
-      refetchQueries:[{
-        query: ALL_POSTS_QUERY,
-      }]
-      // update: (store, { data: { insert_post } }) => {
-      //   const data: any = store.readQuery({
-      //     query: ALL_POSTS_QUERY
-      //   });
-      //   // TODO: figure out how to access the right element in the store
-      //   data.posts.push(insert_post);
-      //   store.writeQuery({ query: ALL_POSTS_QUERY, data })
-      // }
     }).subscribe(({data}) => {
       console.log('got data:', data);
     }, (error) => {

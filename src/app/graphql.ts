@@ -1,19 +1,19 @@
 import { Author, Post } from './types';
 import gql from 'graphql-tag'
 
-export const POST_SUBSCRIPTION = gql`
-subscription {
-  posts {
-    id
-    published
-    title
-    author { id, name }
+export const SUBSCRIBE_TO_POSTS = gql`
+  subscription {
+    posts {
+      id
+      published
+      title
+      author { id, name }
+    }
   }
-}
 `;
 
-export const ALL_POSTS_QUERY = gql`
-  query Posts {
+export const QUERY_ALL_POSTS = gql`
+  query {
     posts {
       id
       title
@@ -22,12 +22,12 @@ export const ALL_POSTS_QUERY = gql`
     }
   }
 `;
-export interface AllPostQueryResponse {
+export interface AllPostsQueryResponse {
   allPosts: Post[];
   loading: boolean;
 }
 
-export const ALL_AUTHORS_QUERY = gql`
+export const QUERY_ALL_AUTHORS = gql`
   query Users {
     users {
       id
@@ -35,25 +35,23 @@ export const ALL_AUTHORS_QUERY = gql`
     }
   }
 `;
-export interface AllAuthorQueryResponse {
+export interface AllAuthorsQueryResponse {
   allAuthors: Author[];
   loading: boolean;
 }
 
-
-// TODO: make a return interface for this mutation's `returning` field
-export const NEW_POST_SUBMIT = gql`
+export const SUBMIT_NEW_POST = gql`
   mutation insert_post($objects:[posts_insert_input!]!) {
-  insert_posts(objects: $objects) {
-    returning {
-      id,
-      title,
-      author {id, name}
+    insert_posts(objects: $objects) {
+      returning {
+        id,
+        title,
+        author {id, name}
+      }
     }
   }
-}
 `;
-export interface CreatePostMutationResponse {
+export interface SubmitPostMutationResponse {
   createPost: Post;
   loading: boolean;
 }

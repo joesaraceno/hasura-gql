@@ -13,7 +13,7 @@ import { GraphQLConfigModule } from './apollo.config';
 import { HttpClientModule } from '@angular/common/http';
 
 // custom components
-import { PostsListComponent } from './components/posts-list.component';
+import { PostsListComponent } from './components/posts-list.component/posts-list.component';
 import { NewPostComponent } from './components/new-post.component/new-post.component';
 
 @NgModule({

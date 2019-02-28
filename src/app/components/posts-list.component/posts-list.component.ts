@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { Post } from '../types';
-import { ALL_POSTS_QUERY, POST_SUBSCRIPTION } from '../graphql';
+import { Post } from '../../types';
+import { QUERY_ALL_POSTS, SUBSCRIBE_TO_POSTS } from '../../graphql';
 
 type Response = {
   loading: boolean;
@@ -26,17 +25,16 @@ type Response = {
     </div>
   `,
 })
-export class PostsListComponent implements OnInit {
+export class PostsListComponent implements OnInit, OnDestroy {
   postsQuery: QueryRef<Post[]>;
   posts: Post[];
   loading = true;
   error: any;
-  private querySubscription: Subscription;
   constructor(private apollo: Apollo) {}
 
   ngOnInit() {
     this.postsQuery = this.apollo.watchQuery({
-      query: ALL_POSTS_QUERY
+      query: QUERY_ALL_POSTS
     })
 
     this.postsQuery.valueChanges.subscribe((result) => {
@@ -44,7 +42,7 @@ export class PostsListComponent implements OnInit {
     })
 
     this.postsQuery.subscribeToMore({
-      document: POST_SUBSCRIPTION,
+      document: SUBSCRIBE_TO_POSTS,
       updateQuery: (prev, { subscriptionData}) => {
         if(!subscriptionData.data) {
           return prev;
