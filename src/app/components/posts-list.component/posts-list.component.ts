@@ -28,6 +28,9 @@ export class PostsListComponent implements OnInit, OnDestroy {
     // TODO: make this respect some sort of order
     this.postsQuery.subscribeToMore({
       document: SUBSCRIBE_TO_POSTS,
+      // TODO: set up a valueChanges trigger on this table
+      // to allow only a single post to be sent back in this instead of all posts
+      // need to edit the mutation and maybe make a trigger on the server
       updateQuery: (prev, { subscriptionData }) => {
         if(!subscriptionData.data) {
           return prev;
@@ -43,11 +46,11 @@ export class PostsListComponent implements OnInit, OnDestroy {
     this.submitPublishPost();
   }
 
+  // TODO: make this set some sort of checked status on a copy.
   submitPublishPost() {
     if (!this.postToPublish) {
       return console.log('no post selected');
     }
-    console.log('Post was:', this.postToPublish.published ? 'Published' : 'Not Published');
     this.apollo.mutate({
       mutation: MUTATE_POST_PUBLISHED,
       variables: {
@@ -58,7 +61,6 @@ export class PostsListComponent implements OnInit, OnDestroy {
       },
     }).subscribe(( { data } ) => {
       console.log('mutation successful published:', data);
-      console.log('Post is:', this.postToPublish.published ? 'Published' : 'Not Published');
     }, error => {
       console.log('mutation made an error:', error);
     });

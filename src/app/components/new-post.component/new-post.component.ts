@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-// import { Subscription } from 'rxjs';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Author, Post } from '../../types';
-import { QUERY_ALL_AUTHORS, AllAuthorsQueryResponse, SUBMIT_NEW_POST, QUERY_ALL_POSTS } from 'src/app/graphql';
+import { QUERY_ALL_AUTHORS, SUBMIT_NEW_POST } from 'src/app/graphql';
 
 // TODO: remove this once we put in forms
 // just for dummy crud until we get forms up and running
@@ -40,7 +39,8 @@ export class NewPostComponent implements OnInit, OnDestroy {
       query: QUERY_ALL_AUTHORS
     });
 
-    // use the queryRef to subscribe to changes in the table
+    // use the queryRef to make a query, subscribe to the Observable inside of valueChanges
+    // when the valueChanges event happens, result will have the data
     this.authorsSubscription.valueChanges.subscribe((result) => {
       this.authors = result.data;
       this.loading = false;
