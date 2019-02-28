@@ -1,0 +1,16 @@
+<div> Current Articles </div>
+<div *ngIf="loading">
+  Loading...
+</div>
+<div *ngIf="error">
+  Error :(
+</div>
+<div *ngIf="posts">
+  <div *ngFor="let post of posts; let i = index;">
+    <p [ngClass]="{'embolden':post.published}">
+      {{ post.author?.name | titlecase }}'s "{{ post.title }}"
+      <mat-checkbox [(ngModel)]="post.published"></mat-checkbox>
+      <button mat-button mat-raised-button color="primary" (click)="publishExistingPost(i)">{{ post.published ? 'Unp' : 'P' }}ublish</button>
+    </p>
+  </div>
+</div>

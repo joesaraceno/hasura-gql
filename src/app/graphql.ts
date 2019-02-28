@@ -46,6 +46,7 @@ export const SUBMIT_NEW_POST = gql`
       returning {
         id,
         title,
+        published,
         author {id, name}
       }
     }
@@ -55,3 +56,21 @@ export interface SubmitPostMutationResponse {
   createPost: Post;
   loading: boolean;
 }
+
+export const MUTATE_POST_PUBLISHED = gql`
+  mutation update_posts($id: Int, $changes: posts_set_input) {
+    update_posts(
+      where: {id: {_eq: $id}},
+      _set: $changes
+    ) {
+      affected_rows
+      returning {
+        id,
+        title,
+        published,
+        author ,
+          {id, name}
+      }
+    }
+  }
+`;
