@@ -1,9 +1,11 @@
 import { Author, Post } from './types';
 import gql from 'graphql-tag'
 
+// TODO: move the component folders
+
 export const SUBSCRIBE_TO_POSTS = gql`
   subscription {
-    posts {
+    posts(order_by: {created: desc}) {
       id
       published
       title
@@ -58,7 +60,7 @@ export interface SubmitPostMutationResponse {
 }
 
 export const MUTATE_POST_PUBLISHED = gql`
-  mutation update_posts($id: Int, $changes: posts_set_input) {
+  mutation update_posts($id:Int,$changes:posts_set_input) {
     update_posts(
       where: {id: {_eq: $id}},
       _set: $changes
