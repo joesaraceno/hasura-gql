@@ -3,9 +3,10 @@ import gql from 'graphql-tag'
 
 // TODO: move the component folders
 
+// TODO: make this query respect some order on internal key(or our own timestamp key, I guess)?
 export const SUBSCRIBE_TO_POSTS = gql`
   subscription {
-    posts(order_by: {created: desc}) {
+    posts(order_by: { created_at: desc }) {
       id
       published
       title

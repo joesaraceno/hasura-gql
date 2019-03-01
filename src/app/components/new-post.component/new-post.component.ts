@@ -66,9 +66,9 @@ export class NewPostComponent implements OnInit, OnDestroy {
       mutation: SUBMIT_NEW_POST,
       variables: {
         objects: [
-        {
-          author_id: 1,
-          title: someNewPost.title
+          {
+            author_id: 1,
+            title: someNewPost.title
           }
         ]
       },

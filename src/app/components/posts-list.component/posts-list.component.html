@@ -6,11 +6,33 @@
   Error :(
 </div>
 <div *ngIf="posts">
-  <div *ngFor="let post of posts; let i = index;">
-    <p [ngClass]="{'embolden':post.published}">
-      {{ post.author?.name | titlecase }}'s "{{ post.title }}"
-      <mat-checkbox [(ngModel)]="post.published"></mat-checkbox>
-      <button mat-button mat-raised-button color="primary" (click)="publishExistingPost(i)">{{ post.published ? 'Unp' : 'P' }}ublish</button>
-    </p>
-  </div>
+  <table mat-table [dataSource]="posts" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef> Author </th>
+      <td mat-cell *matCellDef="let post"> {{ post.author?.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let post"> {{ post.author?.name }} </td>
+    </ng-container>
+
+    <!-- TODO make a checkmark or badge -->
+    <ng-container matColumnDef="published">
+      <th mat-header-cell *matHeaderCellDef> Published </th>
+      <td mat-cell *matCellDef="let post"> {{ post.published ? 'Published' : 'Not Published' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="details">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let post; let i = index;">
+        <button mat-button mat-raised-button color="primary" (click)="publishExistingPost(i)">{{ !post.published === false ? 'Unp' : 'P' }}ublish</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
 </div>

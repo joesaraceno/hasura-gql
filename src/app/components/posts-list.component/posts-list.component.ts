@@ -14,6 +14,7 @@ export class PostsListComponent implements OnInit, OnDestroy {
   postToPublish: Post;
   loading = true;
   error: any;
+  displayedColumns = ['author','title','published','details']
   constructor(private apollo: Apollo) {}
 
   ngOnInit() {
@@ -32,6 +33,7 @@ export class PostsListComponent implements OnInit, OnDestroy {
       // to allow only a single post to be sent back in this instead of all posts
       // need to edit the mutation and maybe make a trigger on the server
       updateQuery: (prev, { subscriptionData }) => {
+        this.loading = false;
         if(!subscriptionData.data) {
           return prev;
         }
@@ -42,12 +44,12 @@ export class PostsListComponent implements OnInit, OnDestroy {
 
   publishExistingPost(index) {
     this.postToPublish = this.posts[index];
-    console.log(this.postToPublish);
     this.submitPublishPost();
   }
 
   // TODO: make this set some sort of checked status on a copy.
   submitPublishPost() {
+    this.loading = true;
     if (!this.postToPublish) {
       return console.log('no post selected');
     }
@@ -56,12 +58,14 @@ export class PostsListComponent implements OnInit, OnDestroy {
       variables: {
         "id": this.postToPublish.id,
         "changes": {
-          "published": this.postToPublish.published
+          "published": !this.postToPublish.published
         }
       },
     }).subscribe(( { data } ) => {
+      this.loading = false;
       console.log('mutation successful published:', data);
     }, error => {
+      this.loading = false;
       console.log('mutation made an error:', error);
     });
   }
