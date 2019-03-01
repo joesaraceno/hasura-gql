@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 // TODO: make this query respect some order on internal key(or our own timestamp key, I guess)?
 export const SUBSCRIBE_TO_POSTS = gql`
   subscription {
-    posts(order_by: { created_at: desc }) {
+    posts(order_by: { id: desc }) {
       id
       published
       title
