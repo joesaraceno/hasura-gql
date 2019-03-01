@@ -24,7 +24,7 @@ function newPost(config: Post): { id: number, title: string, published: boolean 
   templateUrl: './new-post.component.html',
   styleUrls: ['./new-post.component.scss']
 })
-export class NewPostComponent implements OnInit, OnDestroy {
+export class NewPostComponent implements OnInit {
   authorsSubscription: QueryRef<Author[]>;
   authors: Author[];
   loading = true;
@@ -51,11 +51,6 @@ export class NewPostComponent implements OnInit, OnDestroy {
         // this.submitPost();
       }, 4 * 1000)
     });
-  }
-
-  ngOnDestroy() {
-    // TODO: unsubscribe?
-    // this.authorsSubscription.unsubscribe();
   }
 
   submitPost() {

@@ -15,12 +15,16 @@ import { HttpClientModule } from '@angular/common/http';
 // custom components
 import { PostsListComponent } from './components/posts-list.component/posts-list.component';
 import { NewPostComponent } from './components/new-post.component/new-post.component';
+import { OtherViewComponent } from './views/other.view/other.view';
+import { HomeViewComponent } from './views/home.view/home.view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PostsListComponent,
     NewPostComponent,
+    OtherViewComponent,
+    HomeViewComponent,
   ],
   imports: [
     AppRoutingModule,

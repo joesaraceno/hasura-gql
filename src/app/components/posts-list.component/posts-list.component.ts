@@ -8,7 +8,7 @@ import { QUERY_ALL_POSTS, SUBSCRIBE_TO_POSTS, MUTATE_POST_PUBLISHED } from '../.
   templateUrl: './posts-list.component.html',
   styleUrls: ['./posts-list.component.scss']
 })
-export class PostsListComponent implements OnInit, OnDestroy {
+export class PostsListComponent implements OnInit {
   postsQuery: QueryRef<Post[]>;
   posts: Post[];
   postToPublish: Post;
@@ -34,6 +34,8 @@ export class PostsListComponent implements OnInit, OnDestroy {
       // need to edit the mutation and maybe make a trigger on the server
       updateQuery: (prev, { subscriptionData }) => {
         this.loading = false;
+        // we'll have to make this push the new post
+        // into the current array, to avoid big queries
         if(!subscriptionData.data) {
           return prev;
         }
@@ -70,9 +72,5 @@ export class PostsListComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    // TODO: unsubscribe at some point?
-    // this.postsQuery.unsubscribe();
-  }
-}
+};
 
